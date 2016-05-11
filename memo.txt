@@ -1,0 +1,24 @@
+■src
+対応ソース
+・CommonUtill.java
+　⇒今回は改行コードに使用（しかも固定値）
+・ConvertR2K.java
+　⇒「ローマ字」から「ひらがな」への変換処理
+・SampleR2K.java
+　⇒各クラスの使用例のようなモノ
+・TextfileRead.java
+　⇒テキストファイルからの読込処理
+・TextfileWrite.java
+　⇒テキストファイルの出力処理
+
+■classes
+上記をビルドしたファイル群
+
+・コマンドプロンプトからの使用方法
+適当な場所に「classes」をまるごと配置
+
+例）
+※C直下に置いた場合
+cd C:\classes
+java SampleR2K temp\in.txt temp\out.txt
+
