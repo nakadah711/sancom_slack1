@@ -35,48 +35,52 @@ public class ConvertR2K implements ConvertInterface {
 
         convertStr = "";
         String buf = "";
-        //String workStr = inputStr.toLowerCase();
-        String workStr = ConvertR2KUtill.convertPrepare(inputStr);
-        String tmp;
+        String workStr = inputStr;
+        //String tmp;
+        ConvertStringData csd = new ConvertStringData();
 
         for (int i = 0; i < workStr.length(); i++ ) {
-            tmp = workStr.substring(i,i+1);
+            csd.setOriginCurrent(workStr.substring(i,i+1));
+            csd.setConvertCurrent(csd.getOriginCurrent());
 
-            int charType = ConvertR2KUtill.charType(tmp);
-            if(charType != ConvertR2KUtill.OTHER) {
+            int charType = ConvertR2KUtill.charType(csd.getConvertCurrent());
+            if (charType != ConvertR2KUtill.OTHER) {
                 //変換対象の末尾が母音
-                String convertChar = r2k(buf,charType);
-                if(convertChar.equals("")) {
+                String convertChar = r2k(csd.getConvertS(),charType);
+                if (convertChar.equals("")) {
                     //末尾が母音なのに変換テーブルにHITしなかった
-                    String workBuf = buf;
-                    while(workBuf.length() > 0 && convertChar.equals("")) {
+                    for (int j = 0; j < csd.getConvertS().length(); j++) {
                         //一文字ずつ子音を除去して変換テーブルから変換する
                         //変換できなかった子音は、そのまま表示する
-                        convertStr = convertStr + workBuf.substring(0,1);
-                        workBuf = workBuf.substring(1);
-                        convertChar = r2k(workBuf,charType);
+                        convertStr = convertStr + csd.getOriginS().substring(j,1);
+                        convertChar = r2k(csd.getConvertS().substring(j+1),charType);
+                        if (!convertChar.equals("")) break;
                     }
                 }
                 convertStr = convertStr + convertChar;
-                buf = "";
+                csd.clearConvertS();
             } else {
                 //変換対象の末尾が母音以外
-                int result = otherConvert(buf,tmp);
+                int result = otherConvert(csd);
                 switch(result){
                     case CLEAR:
-                        buf = "";
+                        csd.clearConvertS();
                         break;
                     case STOCK:
-                        buf = buf + tmp;
+                        csd.setConvertS(csd.getConvertS() + csd.getConvertCurrent());
+                        csd.setOriginS(csd.getOriginS() + csd.getOriginCurrent());
                         break;
                     case SHORTEN:
-                        buf = buf.substring(1) + tmp;
+                        csd.setConvertS(csd.getConvertS().substring(1) + csd.getConvertCurrent());
+                        csd.setOriginS(csd.getOriginS().substring(1) + csd.getOriginCurrent());
                         break;
                     case REPLACE:
-                        buf = tmp;
+                        csd.setConvertS(csd.getConvertCurrent());
+                        csd.setOriginS(csd.getOriginCurrent());
                         break;
                     default:
-                        buf = buf + tmp;
+                        csd.setConvertS(csd.getConvertS() + csd.getConvertCurrent());
+                        csd.setOriginS(csd.getOriginS() + csd.getOriginCurrent());
                         break;
                 }
             }
@@ -88,7 +92,7 @@ public class ConvertR2K implements ConvertInterface {
      */
     private String r2k(String s, int value) {
         for(int i = 0; i < r2kTable.length; i++) {
-            if(s.equals(r2kTable[i][ConvertR2KUtill.CHK_LINE])) {
+            if (s.equals(r2kTable[i][ConvertR2KUtill.CHK_LINE])) {
                 return r2kTable[i][value];
             }
         }
@@ -98,29 +102,29 @@ public class ConvertR2K implements ConvertInterface {
     /**
      * 母音を含まない文字の変換
      */
-    private int otherConvert(String buf, String tmp) {
+    private int otherConvert(ConvertStringData csd) {
         int ret = CLEAR;
-        if(buf.equals("n") && !tmp.equals("y")) {
+        if (csd.getConvertS().equals("n") && !csd.getConvertCurrent().equals("y")) {
             convertStr = convertStr + "ん";
-            if(!tmp.equals("n")) {
+            if(!csd.getConvertCurrent().equals("n")) {
                 ret = SHORTEN;
             }
-        } else if(java.lang.Character.isLetter(tmp.charAt(0))) {
-            if(buf.equals(tmp)) {
+        } else if (java.lang.Character.isLetter(csd.getConvertCurrent().charAt(0))) {
+            if (csd.getConvertS().equals(csd.getConvertCurrent())) {
                 convertStr = convertStr + "っ";
                 ret = REPLACE;
-            } else if(buf.equals("")) {
+            } else if (csd.getConvertS().equals("")) {
                 ret = REPLACE;
             } else {
-                if(isPermissionStr(buf + tmp)) {
+                if (isPermissionStr(csd.getConvertS() + csd.getConvertCurrent())) {
                     ret = STOCK;
                 } else {
-                    convertStr = convertStr + buf;
+                    convertStr = convertStr + csd.getOriginS();
                     ret = REPLACE;
                 }
             }
         } else {
-            convertStr = convertStr + buf + specialConvert(tmp);
+            convertStr = convertStr + csd.getOriginS() + specialConvert(csd.getOriginCurrent());
         }
         return ret;
     }
@@ -130,9 +134,9 @@ public class ConvertR2K implements ConvertInterface {
      */
     private String specialConvert(String s) {
         //TODO:気になるのがあったら追加したり削除したり
-        if(s.equals(",") || s.equals("，")) return "、";
-        if(s.equals(".") || s.equals("．")) return "。";
-        if(s.equals("-") || s.equals("‐") || s.equals("－")) return "ー";
+        if (s.equals(",") || s.equals("，")) return "、";
+        if (s.equals(".") || s.equals("．")) return "。";
+        if (s.equals("-") || s.equals("‐") || s.equals("－")) return "ー";
         return s;
     }
 
@@ -141,7 +145,7 @@ public class ConvertR2K implements ConvertInterface {
      */
     private boolean isPermissionStr(String s) {
         for(int i = 0; i < r2kTable.length; i++) {
-            if(s.equals(r2kTable[i][ConvertR2KUtill.CHK_LINE])) {
+            if (s.equals(r2kTable[i][ConvertR2KUtill.CHK_LINE])) {
                 return true;
             }
         }

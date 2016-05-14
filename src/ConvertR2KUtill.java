@@ -148,27 +148,4 @@ public class ConvertR2KUtill {
         }
         return ret;
     }
-
-    /**
-     * ƒAƒ‹ƒtƒ@ƒxƒbƒg‚Ì’uŠ·
-     */
-    public static String convertPrepare(String s) {
-        return zenkaku2hankaku(s).toLowerCase();
-    }
-    
-    /**
-     * ‘SŠp‚ğ”¼Šp‚É•ÏŠ·
-     */
-    private static String zenkaku2hankaku(String s) {
-        StringBuffer sb = new StringBuffer(s);
-        for (int i = 0; i < sb.length(); i++) {
-            char c = sb.charAt(i);
-            if (c >= '‚' && c <= '‚š') {
-                sb.setCharAt(i, (char) (c - '‚' + 'a'));
-            } else if (c >= '‚`' && c <= '‚y') {
-                sb.setCharAt(i, (char) (c - '‚`' + 'A'));
-            }
-        }
-        return sb.toString();
-    }
 }
