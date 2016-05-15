@@ -96,7 +96,8 @@ public class ConvertR2K implements ConvertInterface {
                 return r2kTable[i][value];
             }
         }
-        return s + r2kTable[ConvertR2KUtill.CHK_LINE][value];
+        //return s + r2kTable[ConvertR2KUtill.CHK_LINE][value];
+        return "";
     }
 
     /**
