@@ -34,9 +34,7 @@ public class ConvertR2K implements ConvertInterface {
         if (inputStr == null || inputStr.equals("")) return;
 
         convertStr = "";
-        String buf = "";
         String workStr = inputStr;
-        //String tmp;
         ConvertStringData csd = new ConvertStringData();
 
         for (int i = 0; i < workStr.length(); i++ ) {
