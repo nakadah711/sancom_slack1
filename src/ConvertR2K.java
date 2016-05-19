@@ -108,6 +108,8 @@ public class ConvertR2K implements ConvertInterface {
             if(!csd.getConvertCurrent().equals("n")) {
                 ret = SHORTEN;
             }
+        } else if (csd.getConvertS().equals("x") && csd.getConvertCurrent().equals("n")) {
+            convertStr = convertStr + "Вс";
         } else if (java.lang.Character.isLetter(csd.getConvertCurrent().charAt(0))) {
             if (csd.getConvertS().equals(csd.getConvertCurrent())) {
                 convertStr = convertStr + "ВЅ";
