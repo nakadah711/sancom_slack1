@@ -1,3 +1,13 @@
+■使用方法
+コマンドプロンプトでclasses配下へ移動し、
+下記コマンドを実行すると、tempフォルダ配下に「out.txt」を吐き出します。
+
+java SampleR2K temp\in.txt temp\out.txt
+
+tempフォルダ配下のin.txtを書き換えるか、
+指定したいファイルパスに引数を書き換えて実行すれば
+他内容でも試せます。
+
 ■src
 対応ソース
 ・CommonUtill.java
@@ -7,10 +17,6 @@
 　⇒変換に使用するテーブル等
 ・ConvertStringData
 　⇒「ローマ字」から「ひらがな」へ変換対象のデータ
-　　変換用に加工した状態で詰まれた子音文字（小文字に統一、全角を半角に統一されたもの）
-　　変換用に加工する前の状態で詰まれた子音文字
-　　変換用に加工した状態の最後の1文字
-　　変換用に加工する前の状態の最後の1文字
 ・SampleR2K.java
 　⇒各クラスの使用例のようなモノ
 ・TextfileRead.java
@@ -18,12 +24,4 @@
 ・TextfileWrite.java
 　⇒テキストファイルの出力処理
 
-■使用方法
-・ビルド
-　javac SampleR2K.java
-
-・使用例
-※ビルドしたフォルダ配下にtempフォルダを作成し、
-　そこにin.txt（取り込みファイル）を配置し、out.txtとして出力する場合
-java SampleR2K temp\in.txt temp\out.txt
 
