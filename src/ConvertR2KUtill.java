@@ -2,6 +2,7 @@
  * 変換表
  */
 public class ConvertR2KUtill {
+    //TODO:訓令式のテーブル等
     public static final int CHK_LINE = 0;
     public static final int A_DAN    = 1;
     public static final int I_DAN    = 2;

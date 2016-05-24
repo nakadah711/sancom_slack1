@@ -102,6 +102,7 @@ public class ConvertR2K implements ConvertInterface {
      * 母音を含まない文字の変換
      */
     private int otherConvert(ConvertStringData csd) {
+        //TODO:ヘボン式で「ん」を「m」で表記する場合の対応
         int ret = CLEAR;
         if (csd.getConvertS().equals("n") && !csd.getConvertCurrent().equals("y")) {
             convertStr = convertStr + "ん";
